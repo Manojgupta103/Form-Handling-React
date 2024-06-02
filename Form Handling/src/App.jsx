@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {Col, Container, Row, } from 'react-bootstrap';
-import './App.css'
 
+import './index.css'
 
 function App() {
   let [FormData,setFormData]=useState(
@@ -16,8 +16,6 @@ function App() {
   )
 
   let[userData,setUserData]=useState([])
-
-
   let getvalue=(event)=>{
       let oldData = { ...FormData}
       let inputname=event.target.name;
