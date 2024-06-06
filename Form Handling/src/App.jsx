@@ -25,7 +25,6 @@ function App() {
   const handlesubmit = (event) => {
     event.preventDefault();
 
-    // Form validation
     if (!FormData.uname || !FormData.uemail || !FormData.uphone || !FormData.umessage) {
       alert("All fields are required!");
       return;
@@ -38,26 +37,35 @@ function App() {
       umessage: FormData.umessage
     };
 
-    if (FormData.index !== '') {
+    let checkFilterUser=userData.filter((v) => v.uemail=FormData.uemail || v.phone== FormData.uphone )
+    if(checkFilterUser.length==1){
+      alert("User Already Exists")
+    } 
+    else{
+      
+      if (FormData.index !== '') {
 
-      const updatedData = userData.map((item, idx) =>
-        idx === parseInt(FormData.index) ? currentUserFormdata : item
-      );
-      setUserData(updatedData);
-    } else {
-
-      const oldUserData = [...userData, currentUserFormdata];
-      setUserData(oldUserData);
+        const updatedData = userData.map((item, idx) =>
+          idx === parseInt(FormData.index) ? currentUserFormdata : item
+        );
+        setUserData(updatedData);
+      } else {
+  
+        const oldUserData = [...userData, currentUserFormdata];
+        setUserData(oldUserData);
+      }
+      
+  
+      setFormData({
+        uname: "",
+        uemail: "",
+        uphone: "",
+        umessage: "",
+        index: ''
+      });
     }
-
-    setFormData({
-      uname: "",
-      uemail: "",
-      uphone: "",
-      umessage: "",
-      index: ''
-    });
-  };
+    }
+   
 
   const handleEdit = (index) => {
     const dataToEdit = userData[index];
