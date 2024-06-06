@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import "./index.css"
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   const [FormData, setFormData] = useState({
@@ -26,7 +28,7 @@ function App() {
     event.preventDefault();
 
     if (!FormData.uname || !FormData.uemail || !FormData.uphone || !FormData.umessage) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
 
@@ -37,25 +39,25 @@ function App() {
       umessage: FormData.umessage
     };
 
-    let checkFilterUser=userData.filter((v) => v.uemail=FormData.uemail || v.phone== FormData.uphone )
-    if(checkFilterUser.length==1){
-      alert("User Already Exists")
-    } 
-    else{
-      
-      if (FormData.index !== '') {
+    let checkFilterUser = userData.filter((v, idx) => 
+      (v.uemail === FormData.uemail || v.uphone === FormData.uphone) && idx !== parseInt(FormData.index)
+    );
 
+    if (checkFilterUser.length > 0) {
+      toast.error("User Already Exists");
+    } else {
+      if (FormData.index !== '') {
         const updatedData = userData.map((item, idx) =>
           idx === parseInt(FormData.index) ? currentUserFormdata : item
         );
         setUserData(updatedData);
+        toast.success("Data Updated Successfully");
       } else {
-  
         const oldUserData = [...userData, currentUserFormdata];
         setUserData(oldUserData);
+        toast.success("Data Submitted Successfully");
       }
-      
-  
+
       setFormData({
         uname: "",
         uemail: "",
@@ -64,8 +66,7 @@ function App() {
         index: ''
       });
     }
-    }
-   
+  }
 
   const handleEdit = (index) => {
     const dataToEdit = userData[index];
@@ -77,11 +78,13 @@ function App() {
 
   const handleDelete = (index) => {
     const updatedData = userData.filter((_, idx) => idx !== index);
+    toast.success("User Data Deleted");
     setUserData(updatedData);
   };
 
   return (
     <Container fluid>
+      <ToastContainer />
       <Container>
         <Row>
           <Col className='text-center py-5'>
